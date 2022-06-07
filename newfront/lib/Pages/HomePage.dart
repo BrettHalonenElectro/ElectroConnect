@@ -1,10 +1,16 @@
 // import 'package:blogapp/Blog/addBlog.dart';
+import 'package:newfront/Pages/SignIn.dart';
 import 'package:newfront/Pages/WelcomePage.dart';
 // import 'package:blogapp/Screen/HomeScreen.dart';
 // import 'package:blogapp/Profile/ProfileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:newfront/NetworkHandler.dart';
+import 'package:newfront/Screen/BoilerScreen.dart';
+import 'package:newfront/Screen/ConfigureDeviceScreen.dart';
+import 'package:newfront/Screen/ForcedAirScreen.dart';
+import 'package:newfront/Screen/HeatPumpScreen.dart';
+import 'package:newfront/Screen/MakeUpAirScreen.dart';
 import 'package:newfront/Screen/ProvisionScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,9 +21,37 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int pageIndex = 0;
   int currentState = 0;
+  final pages = [
+    BoilerScreen(),
+    HeatPumpScreen(),
+    MakeUpAirScreen(),
+    ForcedAirScreen(),
+  ];
   final storage = FlutterSecureStorage();
   NetworkHandler networkHandler = NetworkHandler();
+
+  String username = "";
+
+  void onItemTapped(int index) {
+    setState(() {
+      pageIndex = index;
+    });
+  }
+
+  void checkProfile() async {
+    var response = await networkHandler.get("/profile/checkProfile");
+    setState(() {
+      username = response['username'];
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,27 +71,14 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             ListTile(
-              title: Text("Provision Device"),
+              title: Text("Connect Boiler"),
               trailing: Icon(Icons.launch),
               onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => ProvisionScreen()));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ConfigureDeviceScreen()));
               },
-            ),
-            ListTile(
-              title: Text("New Story"),
-              trailing: Icon(Icons.add),
-              onTap: () {},
-            ),
-            ListTile(
-              title: Text("Settings"),
-              trailing: Icon(Icons.settings),
-              onTap: () {},
-            ),
-            ListTile(
-              title: Text("Feedback"),
-              trailing: Icon(Icons.feedback),
-              onTap: () {},
             ),
             ListTile(
               title: Text("Logout"),
@@ -68,62 +89,44 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        //backgroundColor: Color.fromRGBO(124, 174, 65, 100.0),
+        backgroundColor: Color(0xff7cae41),
         title: Text("Home"),
         centerTitle: true,
         actions: <Widget>[
           IconButton(icon: Icon(Icons.notifications), onPressed: () {}),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.teal,
-        onPressed: () {
-          // Navigator.of(context)
-          //     .push(MaterialPageRoute(builder: (context) => AddBlog()));
-        },
-        child: Text(
-          "+",
-          style: TextStyle(fontSize: 40),
-        ),
+      body: Center(
+        child: pages.elementAt(pageIndex),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.teal,
-        shape: CircularNotchedRectangle(),
-        notchMargin: 12,
-        child: Container(
-          height: 60,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.home),
-                  color: currentState == 0 ? Colors.white : Colors.white54,
-                  onPressed: () {
-                    setState(() {
-                      currentState = 0;
-                    });
-                  },
-                  iconSize: 40,
-                ),
-                IconButton(
-                  icon: Icon(Icons.person),
-                  color: currentState == 1 ? Colors.white : Colors.white54,
-                  onPressed: () {
-                    setState(() {
-                      currentState = 1;
-                    });
-                  },
-                  iconSize: 40,
-                )
-              ],
-            ),
+      bottomNavigationBar: BottomNavigationBar(
+        //backgroundColor: Colors.red,
+        backgroundColor: Color(0xff0C4861),
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.white,
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Boiler',
           ),
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Heat Pump',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'MakeUp Air',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Forced Air',
+          ),
+        ],
+        currentIndex: pageIndex,
+        onTap: onItemTapped,
       ),
-      //body: widgets[currentState],
     );
   }
 
@@ -131,7 +134,7 @@ class _HomePageState extends State<HomePage> {
     await storage.delete(key: "token");
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => WelcomePage()),
+        MaterialPageRoute(builder: (context) => SignInPage()),
         (route) => false);
   }
 }

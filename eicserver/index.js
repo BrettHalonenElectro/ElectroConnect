@@ -24,10 +24,15 @@ app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 const userRoute = require("./routes/user");
 app.use("/user", userRoute);
+
+const devicedataRoute = require("./routes/devicedata");
+app.use("/devicedata", devicedataRoute);
+
+const userdeviceRoute = require("./routes/userdevice");
+app.use("/userdevice", userdeviceRoute);
+
 const profileRoute = require("./routes/profile");
 app.use("/profile", profileRoute);
-// const blogRoute = require("./routes/blogpost");
-// app.use("/blogPost", blogRoute);
 
 data = {
   msg: "Welcome on DevStack Blog App development YouTube video series",

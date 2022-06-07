@@ -9,11 +9,9 @@ const Profile = Schema(
       required: true,
       unique: true,
     },
-    name: String,
+    
   },
-  {
-    timestamp: true,
-  }
+  
 );
 
 module.exports = mongoose.model("Profile", Profile);

@@ -1,4 +1,5 @@
 import 'package:newfront/Pages/HomePage.dart';
+import 'package:newfront/Pages/SignIn.dart';
 import 'package:newfront/Profile/MainProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +19,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: WelcomePage());
+    return MaterialApp(home: SignInPage());
   }
 }
