@@ -12,29 +12,12 @@ import 'common/graphql_config.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initHiveForFlutter();
-  // //runApp(MyApp());
 
   runApp(const ProviderScope(child: MyApp()));
-  //runApp(MyApp());
 }
 
 class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
-  // GraphQLConfig graphQLConfig = new GraphQLConfig();
-  // @override
-  // Widget build(BuildContext context) {
-  //   // ValueNotifier<GraphQLClient> client = GraphQLConfig.graphInit();
-  //   return GraphQLProvider(
-  //     client: client,
-  //     child: MaterialApp(
-  //       title: 'Electro Connect',
-  //       theme: ThemeData(
-  //         primarySwatch: Colors.green,
-  //       ),
-  //       home: LoginQLPage(),
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context, ref) {
