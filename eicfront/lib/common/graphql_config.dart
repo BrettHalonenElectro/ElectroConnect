@@ -10,7 +10,10 @@ final gqlClientProvider = Provider<ValueNotifier<GraphQLClient>>((ref) {
   final String? token = ref.watch(bearerToken.state).state;
   print("this is the token: $token");
   // print("does the thingy hit this${token!}");
-  final HttpLink _httpLink = HttpLink('http://localhost:3000/graphql',
+  // final HttpLink _httpLink = HttpLink('http://localhost:3000/graphql',
+
+  final HttpLink _httpLink = HttpLink(
+      'http://amazon/amzn2-ami-kernel-5.10-hvm-2.0.20220606.1-x86_64-gp2',
       defaultHeaders: {
         if (token!.isNotEmpty) 'Authorization': 'Bearer $token'
       });
